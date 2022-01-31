@@ -17,6 +17,5 @@ class MainActivity : AppCompatActivity() {
         viewModel.bgMinionList.observe(this){
             Log.d("test", it.toString())
         }
-        viewModel.getBgMinionList()
     }
 }

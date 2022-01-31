@@ -16,15 +16,9 @@ class MainViewModel: ViewModel() {
     private val addBgMinionUseCase = AddBgMinionUseCase(repository)
     private val deleteBgMinionUseCase = DeleteBgMinionUseCase(repository)
 
-    val bgMinionList = MutableLiveData<List<BgMinionItem>>()
-
-    fun getBgMinionList() {
-        val list = getBgMinionListUseCase.getBgMinionList()
-        bgMinionList.value = list
-    }
+    val bgMinionList = getBgMinionListUseCase.getBgMinionList()
 
     fun deleteBgMinionList(bgMinionItem: BgMinionItem) {
         deleteBgMinionUseCase.deleteBgMinion(bgMinionItem)
-        getBgMinionList()
     }
 }

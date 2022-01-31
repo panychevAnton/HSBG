@@ -1,5 +1,7 @@
 package com.antonpa.hsbg.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.antonpa.hsbg.domain.BgMinionItem
 import com.antonpa.hsbg.domain.BgMinionRepository
 import java.lang.RuntimeException
@@ -7,6 +9,8 @@ import java.lang.RuntimeException
 object BgMinionRepositoryImpl: BgMinionRepository {
 
     private val bgMinionList = mutableListOf<BgMinionItem>()
+
+    private val bgMinionListLD = MutableLiveData<List<BgMinionItem>>()
 
     private var autoIncrementId = 0
 
@@ -17,8 +21,8 @@ object BgMinionRepositoryImpl: BgMinionRepository {
         }
     }
 
-    override fun getBgMinionList(): List<BgMinionItem> {
-        return bgMinionList.toList()
+    override fun getBgMinionList(): LiveData<List<BgMinionItem>> {
+        return bgMinionListLD
     }
 
     override fun getBgMinion(bgMinionId: Int): BgMinionItem {
@@ -30,9 +34,15 @@ object BgMinionRepositoryImpl: BgMinionRepository {
     override fun addBgMinion(bgMinionItem: BgMinionItem) {
         bgMinionItem.id = autoIncrementId++
         bgMinionList.add(bgMinionItem)
+        updateLiveDate()
     }
 
     override fun deleteBgMinion(bgMinionItem: BgMinionItem) {
         bgMinionList.remove(bgMinionItem)
+        updateLiveDate()
+    }
+
+    private fun updateLiveDate() {
+        bgMinionListLD.value = bgMinionList.toList()
     }
 }

@@ -1,8 +1,10 @@
 package com.antonpa.hsbg.domain
 
+import androidx.lifecycle.LiveData
+
 interface BgMinionRepository {
 
-    fun getBgMinionList(): List<BgMinionItem>
+    fun getBgMinionList(): LiveData<List<BgMinionItem>>
 
     fun getBgMinion(bgMinionId: Int): BgMinionItem
 
