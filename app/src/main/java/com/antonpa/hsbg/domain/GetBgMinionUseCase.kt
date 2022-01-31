@@ -1,8 +1,8 @@
 package com.antonpa.hsbg.domain
 
-class GetBgMinionUseCase {
+class GetBgMinionUseCase(private val bgMinionRepository: BgMinionRepository) {
 
     fun getBgMinion(BgMinionId: Int): BgMinionItem {
-        TODO()
+        return bgMinionRepository.getBgMinion()
     }
 }
