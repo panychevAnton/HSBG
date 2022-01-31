@@ -10,6 +10,13 @@ object BgMinionRepositoryImpl: BgMinionRepository {
 
     private var autoIncrementId = 0
 
+    init {
+        for (i in 0 .. 10) {
+            val item = BgMinionItem("Name $i", "Url $i", i)
+            addBgMinion(item)
+        }
+    }
+
     override fun getBgMinionList(): List<BgMinionItem> {
         return bgMinionList.toList()
     }
