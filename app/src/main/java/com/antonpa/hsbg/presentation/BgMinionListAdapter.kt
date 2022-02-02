@@ -18,6 +18,7 @@ class BgMinionListAdapter : RecyclerView.Adapter<BgMinionListAdapter.BgMinionIte
         }
 
     var onBgMinionItemClickListener: ((BgMinionItem) -> Unit)? = null
+    var onBgMinionItemLongClickListener: ((BgMinionItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BgMinionItemViewHolder {
          val layout = when (viewType) {
@@ -35,6 +36,10 @@ class BgMinionListAdapter : RecyclerView.Adapter<BgMinionListAdapter.BgMinionIte
         holder.txtCost.text = bgMinionItem.cost.toString()
         holder.itemView.setOnClickListener {
             onBgMinionItemClickListener?.invoke(bgMinionItem)
+        }
+        holder.itemView.setOnLongClickListener {
+            onBgMinionItemLongClickListener?.invoke(bgMinionItem)
+            true
         }
     }
 

@@ -31,11 +31,18 @@ class MainActivity : AppCompatActivity() {
             rvBgMinionList.recycledViewPool.setMaxRecycledViews(VIEW_TYPE_EVEN_COST, MAX_POOL_SIZE)
             rvBgMinionList.recycledViewPool.setMaxRecycledViews(VIEW_TYPE_ODD_COST, MAX_POOL_SIZE)
         }
-        setBgMinionAdapterOnItemClickListener()
-        setBgMinionAdapterOnSwipeCallback(rvBgMinionList)
+        setBgMinionAdapterItemClickListener()
+        setBgMinionAdapterItemLongClickListener()
+        setBgMinionAdapterSwipeCallback(rvBgMinionList)
     }
 
-    private fun setBgMinionAdapterOnSwipeCallback(rvBgMinionList: RecyclerView) {
+    private fun setBgMinionAdapterItemLongClickListener() {
+        bgMinionListAdapter.onBgMinionItemLongClickListener = {
+            it.cost++
+        }
+    }
+
+    private fun setBgMinionAdapterSwipeCallback(rvBgMinionList: RecyclerView) {
         val callback = object : ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -57,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(rvBgMinionList)
     }
 
-    private fun setBgMinionAdapterOnItemClickListener() {
+    private fun setBgMinionAdapterItemClickListener() {
         bgMinionListAdapter.onBgMinionItemClickListener = {
             Log.d("MainActivity", it.toString())
         }
