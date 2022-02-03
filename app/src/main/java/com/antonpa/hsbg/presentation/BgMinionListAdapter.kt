@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.antonpa.hsbg.R
 import com.antonpa.hsbg.domain.BgMinionItem
@@ -13,8 +14,10 @@ class BgMinionListAdapter : RecyclerView.Adapter<BgMinionListAdapter.BgMinionIte
 
     var bgMinionList = listOf<BgMinionItem>()
         set(value) {
+            val callback = BgMinionListDiffCallback(bgMinionList, value)
+            val diffResult = DiffUtil.calculateDiff(callback)
+            diffResult.dispatchUpdatesTo(this)
             field = value
-            notifyDataSetChanged()
         }
 
     var onBgMinionItemClickListener: ((BgMinionItem) -> Unit)? = null
