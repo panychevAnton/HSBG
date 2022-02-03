@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setAdapterToRv()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.bgMinionList.observe(this){
-            bgMinionListAdapter.bgMinionList = it
+            bgMinionListAdapter.submitList(it)
         }
     }
 
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = bgMinionListAdapter.bgMinionList[viewHolder.adapterPosition]
+                val item = bgMinionListAdapter.currentList[viewHolder.adapterPosition]
                 viewModel.deleteBgMinionList(item)
             }
         }
