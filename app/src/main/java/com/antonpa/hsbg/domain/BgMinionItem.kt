@@ -3,7 +3,7 @@ package com.antonpa.hsbg.domain
 data class BgMinionItem(
     val name: String,
     val imageUrl: String,
-    var cost: Int,
+    val cost: Int,
     var id: Int = UNDEFINED_ID
 ) {
     companion object {

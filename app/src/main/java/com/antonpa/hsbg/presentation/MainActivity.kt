@@ -32,14 +32,7 @@ class MainActivity : AppCompatActivity() {
             rvBgMinionList.recycledViewPool.setMaxRecycledViews(VIEW_TYPE_ODD_COST, MAX_POOL_SIZE)
         }
         setBgMinionAdapterItemClickListener()
-        setBgMinionAdapterItemLongClickListener()
         setBgMinionAdapterSwipeCallback(rvBgMinionList)
-    }
-
-    private fun setBgMinionAdapterItemLongClickListener() {
-        bgMinionListAdapter.onBgMinionItemLongClickListener = {
-            it.cost++
-        }
     }
 
     private fun setBgMinionAdapterSwipeCallback(rvBgMinionList: RecyclerView) {

@@ -1,24 +1,16 @@
 package com.antonpa.hsbg.presentation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.antonpa.hsbg.R
 import com.antonpa.hsbg.domain.BgMinionItem
-import java.lang.RuntimeException
 
-class BgMinionListAdapter : RecyclerView.Adapter<BgMinionListAdapter.BgMinionItemViewHolder>() {
-
-    var bgMinionList = listOf<BgMinionItem>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class BgMinionListAdapter : ListAdapter<BgMinionItem, BgMinionItemViewHolder>(
+    BgMinionListAdapterCallback()
+) {
 
     var onBgMinionItemClickListener: ((BgMinionItem) -> Unit)? = null
-    var onBgMinionItemLongClickListener: ((BgMinionItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BgMinionItemViewHolder {
          val layout = when (viewType) {
@@ -31,29 +23,18 @@ class BgMinionListAdapter : RecyclerView.Adapter<BgMinionListAdapter.BgMinionIte
     }
 
     override fun onBindViewHolder(holder: BgMinionItemViewHolder, position: Int) {
-        val bgMinionItem = bgMinionList[position]
-        holder.txtName.text = bgMinionItem.name
-        holder.txtCost.text = bgMinionItem.cost.toString()
-        holder.itemView.setOnClickListener {
-            onBgMinionItemClickListener?.invoke(bgMinionItem)
-        }
-        holder.itemView.setOnLongClickListener {
-            onBgMinionItemLongClickListener?.invoke(bgMinionItem)
-            true
+        val bgMinionItem = getItem(position)
+        with(holder) {
+            txtName.text = bgMinionItem.name
+            txtCost.text = bgMinionItem.cost.toString()
+            itemView.setOnClickListener {
+                onBgMinionItemClickListener?.invoke(bgMinionItem)
+            }
         }
     }
 
     override fun getItemViewType(position: Int): Int =
-        if (bgMinionList[position].cost % 2 == 0) VIEW_TYPE_EVEN_COST else VIEW_TYPE_ODD_COST
-
-
-    override fun getItemCount(): Int = bgMinionList.size
-
-
-    class BgMinionItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val txtName: TextView = view.findViewById(R.id.txt_name)
-        val txtCost: TextView = view.findViewById(R.id.txt_cost)
-    }
+        if (getItem(position).cost % 2 == 0) VIEW_TYPE_EVEN_COST else VIEW_TYPE_ODD_COST
 
     companion object {
         const val VIEW_TYPE_EVEN_COST = 0
