@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.antonpa.hsbg.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var bgMinionListAdapter: BgMinionListAdapter
+    private lateinit var btnAddItem: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +22,11 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.bgMinionList.observe(this){
             bgMinionListAdapter.submitList(it)
+        }
+        btnAddItem = findViewById(R.id.button_add_item)
+        btnAddItem.setOnClickListener {
+            val intent = BgMinionItemActivity.createIntentAddItem(this)
+            startActivity(intent)
         }
     }
 
@@ -59,7 +66,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun setBgMinionAdapterItemClickListener() {
         bgMinionListAdapter.onBgMinionItemClickListener = {
-            Log.d("MainActivity", it.toString())
+            val intent = BgMinionItemActivity.createIntentShowItem(this, it.id)
+            startActivity(intent)
         }
     }
 }

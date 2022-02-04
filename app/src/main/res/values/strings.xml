@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">HSBG</string>
+    <string name="txt_edit_name">Name:</string>
+    <string name="txt_edit_cost">Cost:</string>
+    <string name="btn_save">Save</string>
+    <string name="error_input_name">Incorrect name</string>
+    <string name="error_input_cost">Incorrect cost</string>
 </resources>

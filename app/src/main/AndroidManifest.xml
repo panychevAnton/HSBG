@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HSBG">
         <activity
+            android:name=".presentation.BgMinionItemActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
             android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>

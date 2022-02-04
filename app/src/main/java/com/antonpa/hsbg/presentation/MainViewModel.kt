@@ -13,7 +13,6 @@ class MainViewModel: ViewModel() {
     private val repository = BgMinionRepositoryImpl
 
     private val getBgMinionListUseCase = GetBgMinionListUseCase(repository)
-    private val addBgMinionUseCase = AddBgMinionUseCase(repository)
     private val deleteBgMinionUseCase = DeleteBgMinionUseCase(repository)
 
     val bgMinionList = getBgMinionListUseCase.getBgMinionList()
