@@ -1,7 +1,5 @@
 package com.antonpa.hsbg.presentation
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,10 +14,7 @@ import com.antonpa.hsbg.domain.BgMinionItem
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-class BgMinionItemFragment(
-    private val screenMode: String = UNDEFINED_EXTRA_MODE,
-    private val screenBgMinionId: Int = BgMinionItem.UNDEFINED_ID
-) : Fragment() {
+class BgMinionItemFragment : Fragment() {
 
     private lateinit var txtLayoutName: TextInputLayout
     private lateinit var txtLayoutCost: TextInputLayout
@@ -28,6 +23,13 @@ class BgMinionItemFragment(
     private lateinit var btnSave: Button
 
     private lateinit var viewModel: BgMinionItemViewModel
+    private var screenMode: String = UNDEFINED_EXTRA_MODE
+    private var screenBgMinionId: Int = BgMinionItem.UNDEFINED_ID
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        checkFragmentParams()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +41,6 @@ class BgMinionItemFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkFragmentParams()
         viewModel = ViewModelProvider(this)[BgMinionItemViewModel::class.java]
         initViews(view)
         runCorrectMode()
@@ -65,8 +66,8 @@ class BgMinionItemFragment(
 
     private fun runCorrectMode() {
         when (screenMode) {
-            MODE_SHOW_INTENT -> launchShowMode()
-            MODE_ADD_INTENT -> launchAddMode()
+            MODE_SHOW -> launchShowMode()
+            MODE_ADD -> launchAddMode()
         }
     }
 
@@ -114,10 +115,18 @@ class BgMinionItemFragment(
     }
 
     private fun checkFragmentParams() {
-        if (screenMode != MODE_ADD_INTENT && screenMode != MODE_SHOW_INTENT)
-            throw RuntimeException("Unknown parameter $screenMode")
-        if (screenMode == MODE_SHOW_INTENT && screenBgMinionId == BgMinionItem.UNDEFINED_ID)
-            throw RuntimeException("Parameter bg minion id undefined")
+        val args = requireArguments()
+        if (!args.containsKey(SCREEN_MODE))
+            throw RuntimeException("Extra mode undefined")
+        val mode = args.getString(SCREEN_MODE)
+        if (mode != MODE_ADD && mode != MODE_SHOW)
+            throw RuntimeException("Unknown extra mode $mode")
+        screenMode = mode
+        if (screenMode == MODE_SHOW) {
+            if (!args.containsKey(BG_MINION_ID))
+                throw RuntimeException("Extra bg minion id undefined")
+            screenBgMinionId = args.getInt(BG_MINION_ID, BgMinionItem.UNDEFINED_ID)
+        }
     }
 
     private fun initViews(view: View) {
@@ -129,29 +138,28 @@ class BgMinionItemFragment(
     }
 
     companion object {
-        private const val EXTRA_MODE_INTENT = "extra_mode"
-        private const val EXTRA_BG_MINION_ID_INTENT = "extra_bg_minion_id"
-        private const val MODE_ADD_INTENT = "mode_add"
-        private const val MODE_SHOW_INTENT = "mode_show"
+        private const val SCREEN_MODE = "screen_mode"
+        private const val BG_MINION_ID = "bg_minion_id"
+        private const val MODE_ADD = "mode_add"
+        private const val MODE_SHOW = "mode_show"
 
         private const val UNDEFINED_EXTRA_MODE = ""
 
-        fun createIntentAddItem(context: Context): Intent {
-            val intent = Intent(context, BgMinionItemActivity::class.java)
-            intent.putExtra(EXTRA_MODE_INTENT, MODE_ADD_INTENT)
-            return intent
-        }
 
-        fun createIntentShowItem(context: Context, bgMinionId: Int): Intent {
-            val intent = Intent(context, BgMinionItemActivity::class.java)
-            intent.putExtra(EXTRA_MODE_INTENT, MODE_SHOW_INTENT)
-            intent.putExtra(EXTRA_BG_MINION_ID_INTENT, bgMinionId)
-            return intent
-        }
+        fun createNewInstanceAddItem(): BgMinionItemFragment =
+            BgMinionItemFragment().apply {
+                arguments = Bundle().apply {
+                    putString(SCREEN_MODE, MODE_ADD)
+                }
+            }
 
-        fun createNewInstanceAddItem(): BgMinionItemFragment = BgMinionItemFragment(MODE_ADD_INTENT)
 
         fun createNewInstanceShowItem(bgMinionId: Int): BgMinionItemFragment =
-            BgMinionItemFragment(MODE_SHOW_INTENT, bgMinionId)
+            BgMinionItemFragment().apply {
+                arguments = Bundle().apply {
+                    putString(SCREEN_MODE, MODE_SHOW)
+                    putInt(BG_MINION_ID, bgMinionId)
+                }
+            }
     }
 }
